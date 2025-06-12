@@ -10,7 +10,7 @@ TIMEOUT = 5
 
 def list_serial_ports():
     ports = serial.tools.list_ports.comports()
-    return [(p.device, p.description) for p in ports if 'usb' in p.device.lower() or 'serial' in p.device.lower()]
+    return [(p.device, p.description) for p in ports]
 
 def prompt_for_port():
     while True:
