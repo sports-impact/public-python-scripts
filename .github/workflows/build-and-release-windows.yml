@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     permissions:
-      contents: write  # Needed to create a release and upload assets
+      contents: write
 
     steps:
       - name: Checkout code
@@ -26,11 +26,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller
+          pip install pyserial
+        working-directory: get_report
 
       - name: Build Windows executable
-        run: pyinstaller -F get_report/get_report.py
+        run: pyinstaller -F --hidden-import=serial --hidden-import=pyserial get_report.py
+        working-directory: get_report
 
       - name: Upload .exe to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/get_report.exe
+          files: get_report/dist/get_report.exe
