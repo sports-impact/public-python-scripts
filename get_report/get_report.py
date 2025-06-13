@@ -46,6 +46,11 @@ def before_flight(port):
             print("🔋 Enabling charge mode (pause logging)...")
             ser.write(b'p')
             print("✅ Device prepared for flight.")
+
+        print("\n📌 Next Steps:")
+        print("- Ensure the power **switch is ON** while charging (towards the USB-C port).")
+        print("- Leave the device charging for **at least 4 hours**.")
+        print("- Before unplugging, **switch the device OFF** to avoid draining the battery.")
     except Exception as e:
         print(f"❌ Error: {e}")
 
@@ -84,7 +89,8 @@ def after_flight(port):
                 writer = csv.writer(f)
                 writer.writerow(headers)
                 writer.writerows(csv_data)
-            print(f"📁 Data saved to: {output_file}")
+            print(f"\n📁 Data saved to: {output_file}")
+            print("📌 Tip: You can now open the CSV in Excel, Google Sheets, or import into your analysis tool.")
         else:
             print("⚠️ No data received.")
     except Exception as e:
@@ -92,18 +98,22 @@ def after_flight(port):
 
 def main():
     port = prompt_for_port()
-    print("\n📋 Choose mode:")
-    print("[1] 🛫 Before Flight (Format + Charge Mode)")
-    print("[2] 🛬 After Flight (Download CSV)")
-    print("[3] ❌ Exit")
+    while True:
+        print("\n📋 Choose mode:")
+        print("[1] 🛫 Before Flight (Format + Charge Mode)")
+        print("[2] 🛬 After Flight (Download CSV)")
+        print("[3] ❌ Exit")
 
-    choice = input("> ").strip()
-    if choice == "1":
-        before_flight(port)
-    elif choice == "2":
-        after_flight(port)
-    else:
-        print("🚪 Exiting.")
+        choice = input("> ").strip()
+        if choice == "1":
+            before_flight(port)
+        elif choice == "2":
+            after_flight(port)
+        elif choice == "3":
+            print("🚪 Exiting.")
+            break
+        else:
+            print("❌ Invalid option. Try again.")
 
 if __name__ == "__main__":
     main()
